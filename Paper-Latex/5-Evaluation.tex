@@ -1,0 +1,59 @@
+\section{Evaluation}
+\label{sec:feature}
+
+Firstly we trained our model with the much larger but subpar \textit{by-publisher} dataset and only after that fine tuned it using the much smaller but more precise \textit{by-article} dataset. 
+
+\subsection{Larger dataset}
+
+Labels of the \textit{by-publisher} dataset weren't as precise as the smaller dataset which is why the accuracy results were smaller, in the $58-62\%$ range. Table \ref{table:bypublisher} showcases the results. We can see that adding a sentiment factor as a feature didn't change the overall accuracy for this dataset, but we should mention that it did increase smaller dataset's accuraccy much more. Counting the number of occurrences of biased publisher names quoted in the article increased the accuracy by about $1.3\%$. The largest increase in accuracy came with adding the date as a feature. Adding only month as a feature increased the accuracy by $1.5\%$, but adding both month and year in which an article was published as a feature saw an additional increase of about $0.5\%$. Adding a counter of named entities (in particular nationalities, religious groups and political groups) increased the overall accuracy by a little less than $1\%$. 
+
+
+
+\subsection{Smaller dataset}
+The model with all of the features mentioned above was then finally trained on the \textit{by-article} dataset. While validating our results, the dataset was divided into 5 parts. Four fifths were used for training and the remaining fifth was used for validating. The datasets were permutated and in the end, we took the average of the five permutations. We trained the model using 10 different classifiers. The validation results are shown in Table \ref{table:final}. 
+
+\begin{table}
+	\centering
+	\small
+	\begin{tabular}{lc}
+		\toprule
+		Classifier & Accuracy \\ 
+		\midrule
+		Logistic Regression & 0.70246 \\ 
+		SVC & 0.76590\\
+		\textbf{SVC GridSearch} & \textbf{0.77981}\\
+		GaussianNB & 0.68344 \\ 
+		RandomForestClassifier & 0.71649\\ 
+		MLPClassifier & 0.76117 \\ 
+		AdaBoostClassifier & 0.70866\\
+		LinearSVC & 0.69619 \\ 
+		GradientBoostingClassifier &  0.72242 \\ 
+		IsolationForest & 0.35153 \\ 
+		\bottomrule
+	\end{tabular}
+	\caption{Validation results for the final model on the by-article dataset. Classifier used for submission is bolded.}
+	\label{table:final}
+\end{table}
+
+\begin{table}
+	\centering
+	\small
+	\begin{tabular}{lc}
+		\toprule
+		Team name & Accuracy \\ 
+		\midrule
+		bertha-von-suttner & 0.822 \\ 
+		vernon-fenwick & 0.820\\
+		sally-smedley & 0.809\\
+		tom-jumbo-grumbo & 0.806 \\ 
+		dick-preston & 0.803\\ 
+		\textbf{borat-sagdiyev} & \textbf{0.791} \\ 
+		morbo & 0.790\\
+		howard-beale & 0.783 \\ 
+		ned-leeds &  0.775 \\ 
+		clint-buchanan & 0.771 \\ 
+		\bottomrule
+	\end{tabular}
+	\caption{Final rankings on the main task. Our submission is bolded.}
+	\label{table:testset}
+\end{table}

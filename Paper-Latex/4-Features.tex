@@ -1,0 +1,74 @@
+\section{Features}
+\label{sec:feature}
+
+Our main tool used for processing news articles was Google's Word2Vec. Apart from that, we have used Stanford's GloVe and Facebook's fastText. Both fastText and GloVe performed worse than Word2vec. Furthermore, we used stemming and lemmatization tools from NLTK toolkit. Also, in our earlier stages of development, we used Chunking to get some more meaningful information from the text. 
+
+We ultimately ended up with a 300-dimensional vector for every article. This was the result of passing the preprocessed text into Word2Vec. Below, we elaborate some other features we added to our model as the project development continued.
+
+
+\paragraph{Publication date\\}
+
+
+Hyperpartisanism, or extreme bias, is a classification which is tightly related to politics. As we were dealing with heavily American news outlets, our train of thought led us to believe that news articles around certain dates could be more hyperpartisan. For example, months that are around annual American elections could be a mild indication for hyperpartisanism. Our first impulse was to only include months as a feature, as in United States some elections are every year.With some more testing, we found out that if we also included the year, the accuracy improved by over 2 percent. That improvement could mean that not only do the elections produce more hyperpartisan news, but the type of the election and maybe even the winner, could be impactful on news bias.
+
+\paragraph{Website referencing\\}
+
+
+By inspecting a good number of news articles in the dataset, we found out that the majority of articles reference news sites for which we can find their objective political affiliation. Using that fact, we have made a list of all known American extremely biased news sources and a list of objectively neutral news sources to counter the effect. So just by providing the number of extremely biased and neutral references we have improved the accuracy of our models by 2.3 percent. This could come from the fact that it is generally more common for news sources to reference other news sources with whom they share a similar political affiliation.
+
+
+\paragraph{Sentiment analysis\\}
+
+
+The idea we started with was that hyperpartisan articles tend to be more negative and aggressive than non-hyperpartisan articles tend to be. We used the sentiment intensity analyzer found in NLTK's sentiment library. The analyzer provides the scores for positivity, negativity, neutrality and the compound score (i.e. aggregated score). Those were the 4 features we added, which proved our theory correct and increased our accuracy results by 1.5\%.
+
+
+ \begin{table}
+	\centering
+	\small
+	\begin{tabular}{lc}
+		\toprule
+		Model & Accuracy \\ 
+		\midrule
+		Word2vec & 0.58370 \\ 
+		with added sentiment factor & 0.58589\\
+		with added quotation counter & 0.59874 \\ 
+		with added date (month) & 0.61360\\ 
+		with added date (month and year) & 0.61782\\ 
+		with added NER counter & 0.62556 \\  
+		\bottomrule
+	\end{tabular}
+	\caption{Validation results for our first SVC model on the by-publisher dataset with particular features added one by one.}
+	\label{table:bypublisher}
+\end{table}
+
+\begin{table}
+	\centering
+	\small
+	\begin{tabular}{lc}
+		\toprule
+		Model & Accuracy \\
+		\midrule
+		Word2vec & 0.75663 \\
+		with added sentiment factor & 0.76128\\
+		with added date (month and year) & 0.76285\\
+		with added quotation counter & 0.76904\\
+		with added trigger word counter & 0.77981\\
+		\bottomrule
+	\end{tabular}
+	\caption{Validation results for our first SVC model on the by-article dataset with particular features added one by one.}
+	\label{table:byarticle}
+\end{table}
+
+
+\paragraph{Trigger words\\}
+
+
+By analyzing the articles, we noticed that the writers of extremely biased news articles were prone to using some \textit{trigger words} more often than the writers of neutral news articles. With that in mind, we assembled the list of some possible trigger words (containing mostly profanities). For each article we took the count of \textit{trigger words} in the text, and used it as input in the feature vector.
+
+
+\paragraph{Named entity recognition\\}
+
+
+ A named entity is a real-world object, such as a person, location, organization, product, etc., which can be denoted with a proper name. One of our ideas was counting politics related named entities found in the articles. We presumed that the more named entities were found, the more biased an article was. We used the software library spaCy\footnote{\url{https://spacy.io}} and its named entity recognition tagger to extract mentions of various named entities such as organizations, people, locations, dates, percentages, time and money. We used the counts as inputs in the feature vector. Although counting most of the entity types dropped the total accuracy of the model, one type in particular was beneficial. It is a type called NORP and it denotes nationalities, religious groups and political groups. Counting only the number of these named entities as a feature increased the model's accuracy slightly, about $1\%$.
+ 

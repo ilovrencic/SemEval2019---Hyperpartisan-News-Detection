@@ -1,0 +1,20 @@
+\section{Introduction}
+\label{sec:intro}
+
+The ability to quickly, precisely and efficiently discern if a given article is hyperpartisan can prove to be beneficial in a multitude of different scenarios.
+Should we, for instance, wish to evaluate if a certain news publisher delivers politically biased content, the best way to do so would be analyzing that very content.
+However, the sheer amount of articles modern news companies produce nowadays asks for an automated approach to the problem.
+
+Spotting bias in text is both a well-known and challenging natural language problem. As bias can manifest itself in a covert or ambiguous manner, it is often
+hard even for an experienced reader to detect it. 
+There was some research done on similar issues before \citep{doumit2011online}, but none specifically on the subject of hyperpartisan news.
+
+The system described in this paper was built for the 4th task of the SemEval 2019 competition. The goal of the system, as set by the task, is to, as accurately as possible, 
+predict if a given article is hyperpartisan. While there were other criteria for evaluating the performance of the program (precision, recall, F1), we decided to optimize 
+the program for the accuracy criterion, as the rankings were based solely on it. Accuracy in this context stands for the ratio of correctly predicted articles to the total 
+number of articles. The finalized program reached an accuracy of 79.1\%, which is solid considering the complexity of the problem and the available technology.
+
+The program we built is based on the SVM Model publicly available in the Python's SciKit-Learn library. Our model was trained on a handful of carefully chosen features
+derived from the given dataset and our understanding of the nature of bias. The dataset was split into a high-quality manually labelled set of articles and a huge, but sub-par
+set of automatically labelled articles. For the sake of the finding the optimal model, we also used a Recurrent Neural Network to extract some more valuable articles from the
+second set. By experimenting with the datasets, models and features we managed to create a program which ranked 6th in this competition.
